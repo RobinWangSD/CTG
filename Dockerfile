@@ -25,14 +25,28 @@ RUN apt-get update && apt-get install -y --no-install-recommends locales \
   && ln -fs /usr/share/zoneinfo/America/Los_Angeles /etc/localtime  # Set timezone
 ENV LANG=en_US.UTF-8 LANGUAGE=en_US:en LC_ALL=en_US.UTF-8
 
-# # Install (mini) conda
-# RUN curl -o ~/miniconda.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh && \
-#     chmod +x ~/miniconda.sh && \
-#     ~/miniconda.sh -b -p /opt/conda && \
-#     rm ~/miniconda.sh && \
-#     /opt/conda/bin/conda init && \
-#     /opt/conda/bin/conda install -y python="$PYTHON_VERSION" && \
-#     /opt/conda/bin/conda clean -ya
+WORKDIR /root
+RUN conda create -n bg3.9 python=3.9 \ 
+    && git clone https://github.com/RobinWangSD/CTG.git \
+    && cd CTG \
+    && /opt/conda/envs/bg3.9/bin/pip3 install -e . \
+    && /opt/conda/envs/bg3.9/bin/pip3 install numpy==1.23.4 \
+    && cd .. \
+    && git clone https://github.com/AIasd/trajdata.git \
+    && cd trajdata \
+    && /opt/conda/envs/bg3.9/bin/pip3 install -r trajdata_requirements.txt \
+    && /opt/conda/envs/bg3.9/bin/pip3 install -e . \
+    && cd .. \
+    && git clone https://github.com/NVlabs/spline-planner.git Pplan \
+    && cd Pplan \
+    && /opt/conda/envs/bg3.9/bin/pip3 install -e . \
+    && cd .. \
+    && git clone https://github.com/StanfordASL/stlcg.git \
+    && cd stlcg \
+    && /opt/conda/envs/bg3.9/bin/pip3 install graphviz \
+    && /opt/conda/envs/bg3.9/bin/pip3 install -e . \
+    && git checkout dev \
+    && /opt/conda/envs/bg3.9/bin/pip3 install openai \
+    && /opt/conda/envs/bg3.9/bin/pip3 install tiktoken
 
-# ENV PATH /opt/conda/bin:$PATH
 SHELL ["/bin/bash", "-c"]
