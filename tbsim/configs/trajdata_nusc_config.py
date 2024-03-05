@@ -14,9 +14,9 @@ class NuscTrajdataTrainConfig(TrajdataTrainConfig):
         # dict mapping dataset IDs -> root path
         #       all datasets that will be used must be included here
         self.trajdata_data_dirs = {
-            "nusc_trainval" : "../behavior-generation-dataset/nuscenes",
-            "nusc_test" : "../behavior-generation-dataset/nuscenes",
-            "nusc_mini" : "../behavior-generation-dataset/nuscenes",
+            "nusc_trainval" : "/cogrob-avl-west/nuScenes",
+            "nusc_test" : "/cogrob-avl-west/nuScenes",
+            "nusc_mini" : "/cogrob-avl-west/nuScenes",
         }
 
         # for debug
@@ -45,10 +45,10 @@ class NuscTrajdataTrainConfig(TrajdataTrainConfig):
 
         self.on_ngc = False
         self.logging.terminal_output_to_txt = True  # whether to log stdout to txt file
-        self.logging.log_tb = False  # enable tensorboard logging
-        self.logging.log_wandb = True  # enable wandb logging
+        self.logging.log_tb = True  # enable tensorboard logging
+        self.logging.log_wandb = False  # enable wandb logging
         self.logging.wandb_project_name = "tbsim"
-        self.logging.log_every_n_steps = 10
+        self.logging.log_every_n_steps = 2
         self.logging.flush_every_n_steps = 100
 
 

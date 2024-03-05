@@ -274,6 +274,13 @@ if __name__ == "__main__":
         "--debug", action="store_true", help="Debug mode, suppress wandb logging, etc."
     )
 
+    parser.add_argument(
+        "--device_number",
+        type=int,
+        default=1,
+        help="Specify the number of GPUs for training on clusters.",
+    )
+
     args = parser.parse_args()
 
     if args.config_name is not None:
@@ -303,6 +310,9 @@ if __name__ == "__main__":
     if args.on_ngc:
         ngc_job_id = socket.gethostname()
         default_config.name = default_config.name + "_" + ngc_job_id
+    
+    if args.device_number != None:
+        default_config.devices.num_gpus = args.device_number
 
     default_config.train.on_ngc = args.on_ngc
 
